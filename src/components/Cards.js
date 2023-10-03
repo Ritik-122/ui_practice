@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 
 export default function Cards(props) {
   return (
-    <Card sx={{ maxWidth: 350,backgroundColor:"whitesmoke",boxShadow:"5px 5px #7D7C7C" ,backgroundColor: "#000",
+    <Card sx={{ maxHeight:450, maxWidth: 350,backgroundColor:"whitesmoke",boxShadow:"5px 5px #7D7C7C" ,backgroundColor: "#000",
     color: "#fff",
     opacity: ".8",
     mt:4,

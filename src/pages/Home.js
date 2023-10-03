@@ -1,5 +1,9 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
+import axios from "axios";
 import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import ReactTyped from "react-typed";
 import Cards from "../components/Cards";
 import Faq from "../components/Faq";
 import Footer from "../components/Footer";
@@ -8,6 +12,32 @@ import HomeImageList from "../components/ImageList";
 
 import "../styles/home.css";
 const Home = () => {
+  const [counter, setCounter] = useState(0);
+  const [val,setVal]=useState(null)
+
+  const getCount = async () => {
+    const res = await axios.get("http://localhost:5000/getCount");
+    setVal(res.data);
+  };
+  useEffect(() => {
+    getCount();
+  }, []);
+
+  useEffect(() => {
+    const clearId = setInterval(function () {
+      if (counter === val) {
+        clearInterval(clearId);
+        return;
+      } else {
+        setCounter(counter + 1);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(clearId);
+    };
+  }, [counter]);
+
   return (
     <>
       <Box sx={{ marginTop: "30px" }}>
@@ -29,7 +59,16 @@ const Home = () => {
             <div className="animation">
               <h1>Welcome to King's Gym</h1>
               <p>
-                <i>Eat Sleep Workout. Repeat!</i>
+                <i>
+                  <ReactTyped
+                    backSpeed={20}
+                    cursorChar=">"
+                    showCursor={true}
+                    strings={["Eat Sleep Workout. Repeat!"]}
+                    typeSpeed={100}
+                    loop
+                  />
+                </i>
               </p>
               <h1>5 Days Free Trial</h1>
               <Form />
@@ -61,8 +100,8 @@ const Home = () => {
           Our Products
         </Typography>
       </Box>
-{/* Card */}
-      <Grid container mt={4} mb={10}  paddingLeft={15}>
+      {/* Card */}
+      <Grid container mt={4} mb={10} paddingLeft={15}>
         <Grid item md={4} sm={12} lg={4}>
           <Cards
             img={"https://m.media-amazon.com/images/I/616cI2pfTOL.jpg"}
@@ -95,8 +134,35 @@ const Home = () => {
           />
         </Grid>
       </Grid>
+      {/* Count of Subscribers */}
+      <Box
+        sx={{
+          mt: "80px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Stack direction="column">
+          <Typography
+            className="subhead"
+            variant="h3"
+            sx={{ textDecoration: "underline" }}
+          >
+            Subscribers
+          </Typography>
+          <Typography mt={5} variant="h4" ml={7} mb={5}>
+            Live Count: {counter}
+          </Typography>
+        </Stack>
+      </Box>
+
       {/* FAQ */}
-      <Grid container mb={10} sx={{paddingLeft:"122px",paddingRight:"105px"}}>
+      <Grid
+        container
+        mb={10}
+        sx={{ paddingLeft: "122px", paddingRight: "105px" }}
+      >
         <Grid item md={6} sm={12}>
           <Typography variant="h3" color="whitesmoke">
             Frequently Asked Questions
@@ -106,10 +172,9 @@ const Home = () => {
           <Faq />
         </Grid>
       </Grid>
-      <hr style={{color:"white"}}/>
-    {/* Footer */}
-    <Footer/>
-
+      <hr style={{ color: "white" }} />
+      {/* Footer */}
+      <Footer />
     </>
   );
 };

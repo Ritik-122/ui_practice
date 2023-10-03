@@ -51,6 +51,12 @@ const Footer = () => {
               >
                 Contact Us
               </Link>
+              <Link
+                style={{ textDecoration: "none", color: "white" }}
+                to="/unsubscribe"
+              >
+                Unsubscribe
+              </Link>
             </Stack>
           </Grid>
           <Grid item lg={4} md={4} sm={12} marginTop={2}>

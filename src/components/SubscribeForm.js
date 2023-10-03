@@ -1,4 +1,4 @@
-import  React, { useRef } from 'react';
+import  React, { useRef, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,6 +11,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
+import { Alert } from '@mui/material';
 
 
 
@@ -19,21 +21,53 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const defaultTheme = createTheme();
 
 export default function SubscribeForm() {
+  const myfun=()=>{
+    setTimeout(() => {
+      setisAdded(false);
+      setisAlready(false);
+    },3000 );
+  }
+  
+  const [isAdded,setisAdded]=useState(false);
+  const [isAlready,setisAlready]=useState(false);
     const fname=useRef();
     const lname=useRef();
     const email=useRef();
     const checkbox=useRef();
-  const handleSubmit = (event) => {
+  const handleSubmit =async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const name=fname.current.value+" "+lname.current.value
+    const subscriberData={
+      email: email.current.value,
+      checkbox:checkbox.current.value,
+      name:name
+    }
+    const res=await axios.post('http://127.0.0.1:5000/subscribers',subscriberData)
+    console.log(res.data);
+    if(res.data==='User added'){
+      setisAdded(true);
+      myfun()
+      fname.current.value="";
+      lname.current.value="";
+      email.current.value="";
+      
+    }else if(res.data==="already subscribed"){
+      setisAlready(true)
+      myfun()
+      fname.current.value="";
+      lname.current.value="";
+      email.current.value="";
+    }else{
+
+    }
+
+      
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
+    {isAdded?<Alert>Subscribed</Alert>:""}
+    {isAlready?<Alert>Already Subscribed</Alert>:""}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -60,6 +94,7 @@ export default function SubscribeForm() {
                   fullWidth
                   id="firstName"
                   label="First Name"
+                  inputRef={fname}
                   autoFocus
                 />
               </Grid>
@@ -71,6 +106,7 @@ export default function SubscribeForm() {
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  inputRef={lname}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -81,12 +117,14 @@ export default function SubscribeForm() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  inputRef={email}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
                   label="I want to receive info about offers,subscription charges via email."
+                  inputRef={checkbox}
                 />
               </Grid>
             </Grid>

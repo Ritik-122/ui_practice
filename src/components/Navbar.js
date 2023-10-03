@@ -12,7 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 
-const pages = ["Home", "Contact", "About"];
+const pages = [{page:"Home",href:"/"}, {page:"Contact",href:'/contact'},{href:'/about',page: "About"},{href:'/products',page:"Products"}];
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
@@ -35,7 +35,7 @@ const Navbar = () => {
               variant="h6"
               noWrap
               component="a"
-              href="#"
+              href="/"
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -44,6 +44,7 @@ const Navbar = () => {
                 letterSpacing: ".1rem",
                 color: "inherit",
                 textDecoration: "none",
+                cursor:"pointer"
               }}
             >
               King's Gym
@@ -80,7 +81,7 @@ const Navbar = () => {
               >
                 {pages.map((page) => (
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
+                    <Typography textAlign="center" variant="a" href={page.href}>{page.page}</Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -107,11 +108,12 @@ const Navbar = () => {
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
+                href={page.href}
                   key={page}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
-                  {page}
+                  {page.page}
                 </Button>
               ))}
             </Box>

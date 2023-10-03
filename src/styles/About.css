@@ -1,0 +1,11 @@
+img{
+   
+   opacity: 0.1;
+    height:'800px';
+    width: "1400px";
+    /* background-size: "600px"; */
+    z-index: -1;
+    position: absolute;
+    width:-webkit-fill-available;
+    
+}
